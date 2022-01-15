@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>users</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+    <script defer src="./users.js"></script>
+    <div class="form" name="form">
+        <input type="text" name="name" id="name" placeholder="name">
+        <input type="text" name="city" id="city" placeholder="city">
+        <input type="tel" name="phone" id="phone" placeholder="phone">
+        <input type="text" name="company" id="company" placeholder="company">
+        <button id="sendUser">Отправить пользователя</button>
+    </div>
+
+
+
+    <button id="getUser">Получить 10 пользователей</button>
+    <section class="cards">
+        <div class="card">
+            <h2 class="name">Name</h2>
+            <p class="city">City</p>
+            <p class="phone">Phone</p>
+            <p class="companyName">Company Name</p>
+        </div>
+        <div class="card">
+            <h2 class="name">Name</h2>
+            <p class="city">City</p>
+            <p class="phone">Phone</p>
+            <p class="companyName">Company Name</p>
+        </div>
+        <div class="card">
+            <h2 class="name">Name</h2>
+            <p class="city">City</p>
+            <p class="phone">Phone</p>
+            <p class="companyName">Company Name</p>
+        </div>
+    </section>
+
+    
+</body>
+</html>
+
+

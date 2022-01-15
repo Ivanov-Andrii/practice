@@ -1,0 +1,73 @@
+body {
+    margin: 1em;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: black;
+}
+
+.cards {
+    display: flex;
+    justify-content:start;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-top: 3em;
+}
+
+.card {
+    width: 150px;
+    height: 200px;
+    border: 1px solid white;
+    border-radius: 10px;
+    position: relative;
+    color: white;
+    padding: 2em;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: white;
+    opacity: .1;
+}
+
+button {
+    width: 200px;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    background-color: black;
+    position: relative;
+    cursor: pointer;
+}
+
+button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: white;
+    opacity: .1;
+}
+
+button:hover {
+    color:grey; 
+    border-color: grey;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+    margin-bottom: 2em;
+}
+input {
+    width: 192px;
+    height: 40px;
+}
