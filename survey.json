@@ -1,108 +1,18 @@
 {
-    "questions":  [{
+  "questions":  [{
+    "id": "1",
+    "question": "Are you like your job?",
+    "answers": [
+      {
         "id": "1",
-        "question": "What does OCTAVE mean?",
-        "answers": [
-          {
-            "id": "1",
-            "answer": "Skoda car",
-            "number": 0
-          },
-          {
-            "id": "2",
-            "answer": "geometric figure",
-            "number": 0
-          },
-          {
-            "id": "3",
-            "answer": "musical interval",
-            "number": 0
-          }
-        ]
+        "answer": "yes",
+        "number": 1
       },
       {
         "id": "2",
-        "question": "Who composed Bolero?",
-        "answers": [
-          {
-            "id": "1",
-            "answer": "Joseph Maurice Ravel",
-            "number": 0
-          },
-          {
-            "id": "2",
-            "answer": "Aleksandr Baryshnikov",
-            "number": 0
-          },
-          {
-            "id": "3",
-            "answer": "Brendan Eich",
-            "number": 0
-          }
-        ]
-      },
-      {
-        "id": "3",
-        "question": "Who are the champions?",
-        "answers": [
-          {
-            "id": "1",
-            "answer": "Dynamo Kyiv",
-            "number": 0
-          },
-          {
-            "id": "2",
-            "answer": "We",
-            "number": 0
-          },
-          {
-            "id": "3",
-            "answer": "Bruce Lee and Jean-Claude Van Damme",
-            "number": 0
-          }
-        ]
-      },
-      {
-        "id": "4",
-        "question": "Continue the phrase: I like to...",
-        "answers": [
-          {
-            "id": "1",
-            "answer": "reading",
-            "number": 0
-          },
-          {
-            "id": "2",
-            "answer": "cook",
-            "number": 0
-          },
-          {
-            "id": "3",
-            "answer": "move it",
-            "number": 0
-          }
-        ]
-      },
-      {
-        "id": "5",
-        "question": "What musical instrument does not exist?",
-        "answers": [
-          {
-            "id": "1",
-            "answer": "Bayan",
-            "number": 0
-          },
-          {
-            "id": "2",
-            "answer": "Babayan",
-            "number": 0
-          },
-          {
-            "id": "3",
-            "answer": "Baraban",
-            "number": 0
-          }
-        ]
+        "answer": "no",
+        "number": 2
       }
     ]
+  }]
 }
