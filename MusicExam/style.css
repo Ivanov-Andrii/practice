@@ -1,0 +1,148 @@
+body {
+    background: url(./img/notes.jpg);
+    position: relative;
+}
+
+.alert {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, .7);
+    display: none; 
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+}
+
+.message {
+    position: absolute;
+    width: 500px;
+    height: 200px;
+    background-color: white;
+    box-shadow: 0 0 20px tomato;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.message-text {
+    text-align: center;
+    width: 70%;
+    margin: 0 auto;
+    backdrop-filter: blur(8px);
+    font-family: 'Permanent Marker', cursive;
+    color: tomato;
+}
+
+.message-btn {
+    width: 120px;
+    height: 30px;
+    margin: 0 auto;
+    border: 2px solid tomato;
+    border-radius: 20px;
+    background-color: white;
+    color: tomato;
+    cursor: pointer;
+}
+
+header {
+    text-align: center;
+    width: 70%;
+    margin: 0 auto;
+    backdrop-filter: blur(8px);
+    font-family: 'Permanent Marker', cursive;
+    color: tomato;
+
+    /* min-height: 10vh; */
+}
+
+h1 {
+    text-transform: uppercase;
+    margin-bottom: .3em;
+}
+
+header p {
+    margin-top: 0;
+    display: inline-block;
+    border-radius: .5em;
+    padding: .5em 3em;
+    font-weight: 700;
+    position: relative;
+}
+
+header p::after {
+    content: "";
+    height: 2px;
+    width: 100px;
+    background-color: tomato;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+
+}
+
+.wrap-exam {
+    max-width: 100%;
+    /* background: url(./img/notes.jpg); */
+
+    /* temp */
+    /* min-height: 90vh; */
+}
+
+.exam {
+    margin: 5vh auto;
+    width: 70%;
+    padding: 1em 5em;
+    /* backdrop-filter: blur(8px); */
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    /* temp */
+    min-height: 80vh;
+}
+
+.examBlock {
+    padding: 1em;
+    border: 1px solid tomato;
+    border-radius: 5px;
+    backdrop-filter: blur(8px);
+
+}
+
+.question {
+    font-weight: 700;
+    margin-bottom: .5em;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+}
+
+.answers span {
+    cursor: pointer;
+    padding-left: .5em;
+}
+
+.choice {
+    color: green;
+}
+
+.button {
+    width: 120px;
+    height: 30px;
+    margin: 0 auto;
+    border: 2px solid tomato;
+    border-radius: 20px;
+    background-color: white;
+    color: tomato;
+    cursor: pointer;
+}
+
+.button:hover {
+    color: white;
+    background-color: tomato;
+}

@@ -8,6 +8,9 @@
 //     "company": {
 //       "name": "Romaguera-Crona",
 //     }
+
+// const { default: axios } = require("axios");
+
 //   },
 const url = "https://jsonplaceholder.typicode.com/users";
 let name = document.querySelector("#name");
@@ -17,7 +20,6 @@ let company = document.querySelector("#company");
 let sendUser = document.querySelector("#sendUser");
 let getUser = document.querySelector("#getUser");
 
-console.log(name);
 let cards = document.querySelector(".cards");
 
 getUser.addEventListener("click", () => {
@@ -73,37 +75,43 @@ getUser.addEventListener("click", () => {
 sendUser.addEventListener("click", (e) => {
     const data = {name: name, city, phone, company};
     for (let key in data) {
-        console.log(data[key].value);
         if (data[key].value == "") {
-            // alert(`Введите данные в поле data[key]`) // - почему не работает?
-            alert("Заполните все поля!")
-            
+            alert(`Введите данные в поле "${key}"`) // - почему не работает?
         }
     }
     // console.dir(data);
 
     const user = {
         "id": 1,
-        "name": data[name].value,
+        "name": data.name.value,
         "username": "no data",
         "email": "no data",
         "address": {
             "street": "no data",
             "suite": "no data",
-            "city": data[city].value,
+            "city": data.city.value,
             "zipcode": "no data",
             "geo": {
                 "lat": "no data",
                 "lng": "no data"
             }
         },
-        "phone": data[phone].value,
+        "phone": data.phone.value,
         "website": "no data",
         "company": {
-        "name": data[company].value,
+        "name": data.company.value,
         "catchPhrase": "no data",
         "bs": "no data"
         }
     }
-    // console.log(user);
+    axios({
+        method: "post",
+        url: url,
+        data: user,
+    }).then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
+    })
+
 })
