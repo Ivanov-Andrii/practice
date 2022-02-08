@@ -19,14 +19,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const addHtmlEl = (whatEl, nameParentBlock, whatHtmlIn, index, className) => {
         const htmlEl = document.createElement(whatEl);
-        // if (className !== null) htmlEl.classList.add(className);
         className && htmlEl.classList.add(className);
-        // if (whatHtmlIn !== null) htmlEl.innerHTML = whatHtmlIn;
         whatHtmlIn && (htmlEl.innerHTML = whatHtmlIn);
         const parent = document.getElementsByClassName(nameParentBlock);
-        if (parent.length === 1) parent[0].appendChild(htmlEl);
-        if (parent.length > 1) parent[index].appendChild(htmlEl);
-        // parent[index].appendChild(htmlEl);
+        parent[index].appendChild(htmlEl);
         return parent;
     }
 
@@ -65,21 +61,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     const isHasMistake = (questions) => {
-        let mistake = false;   
+        let mistake = false;
         for (let i = 0, ln = questions.length; i < ln; i++) {
-            // let hasCheck = false;
-            // questions[i].answers.forEach(el => {
-            //     if(el.isChecked) hasCheck = true;
-            // })
-            // questions[i].answers.find(el => el.isChecked) && (hasCheck = true);
             if (!questions[i].answers.find(el => el.isChecked)) {
                 showsAlertWindow("Please answer all questions!\nTRY AGAIN");
-                // alert("Please answer all questions!\nTRY AGAIN");
                 mistake = true;
                 break;
             }
         }
-        // if(mistake) location.reload()
         return mistake;
     }
 
@@ -87,37 +76,41 @@ document.addEventListener('DOMContentLoaded', async function() {
     const calculatePersent = (questions) => {
         // определяем процент от общего и результат дописываем в DOM
         // При таком определении процента код не масштабируемый!!! - переделать
-        const [...span] = document.querySelectorAll("span");
-        span.forEach((el, i) => {
-            let answerGroup = Math.floor(i/3);
-            let answerItem = i%3;
-            let numberItem = questions[answerGroup].answers[answerItem].number;
-            // let answerGroup = i/answers.length
-            let numberAll = questions[answerGroup].numbersAll;
-            let percentItem = (numberItem*100/numberAll).toFixed(2);
-            
-            el.innerHTML += `    ${percentItem}%`;
-            if(questions[answerGroup].answers[answerItem].isChecked) {
-                el.classList.add("choice");
-                el.innerHTML += ` — this is your choice`;
-            }
+        const [...examBlocks] = document.getElementsByClassName("examBlock");
+        examBlocks.forEach((el, i) => {
+            console.log(el)
+            let numberAll = questions[i].numbersAll;
+            questions[i].answers.forEach((answer, index) => {
+                let numberItem = answer.number;
+                let percentItem = (numberItem*100/numberAll).toFixed(2);
+                const answersElements = el.querySelectorAll("span");
+                answersElements[index].innerHTML += ` ${percentItem}%`;
+                if(answer.isChecked) {
+                    answersElements[index].classList.add("choice");
+                    answersElements[index].innerHTML += ` — this is your choice`;
+                }
+            })
         })
+        localStorage.setItem("attemp", 1);
     }
 
-    const checkAttemps = (amount) => {
-        if (localStorage.getItem("attemp") == amount) {
+    const isExamPassed = () => {
+        if (localStorage.getItem("attemp")) {
             showsAlertWindow("You can take exam only once");
-        } else {
-            localStorage.setItem("attemp", amount)
+            return true;
         }
+        return false;
     }
-
     const buildHtmlFromJson = async () => {
+        if(isExamPassed()) {
+            return;
+        }
         const getData = await axios(url);
         const {questions} = getData.data;
 
         questions.forEach(async (el, i) => {
-            addHtmlEl("div", "exam",null, i, "examBlock");
+            // почему в следующей строчке не срабатывает i?
+            addHtmlEl("div", "exam",null, 0, "examBlock");
             addHtmlEl("div", "examBlock", el.question, i, "question");
             addHtmlEl("div", "examBlock", null, i, "answers");
             const answersArray = el.answers;
@@ -130,17 +123,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             inputNameIncrement++;
 
         })
-        addHtmlEl("button", "exam", "Submit", null, "button");
+        addHtmlEl("button", "exam", "Submit", 0, "button");
     }
-    
+
     // MAIN CODE
     await buildHtmlFromJson()
-    checkAttemps(1);
+
 
     // LISTENERS
     const button = document.querySelector('.button');
 
-    button.addEventListener("click", async () => {
+    button && button.addEventListener("click", async () => {
+        if (isExamPassed()) {
+            return;
+        }
         const getData = await axios(url);
         const {questions} = getData.data;
         addIsChecked(questions);
