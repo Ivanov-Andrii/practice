@@ -1,0 +1,131 @@
+body {
+    background-color: black;
+    position: relative;
+}
+
+
+.contentCircle1, .contentCircle2, .contentCircle3, .contentCircle4 {
+    position: absolute;
+    content: "";
+    z-index: -1000;
+}
+
+.contentCircle1 {
+    background: linear-gradient(45deg, #4e06f5, #10f708);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    top: 50px;
+    left: 100px;
+    
+}
+
+.contentCircle2 {
+    background: linear-gradient(-45deg, #120138, #dff708);
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    top: 150px;
+    left: 350px;
+}
+
+.contentCircle3 {
+    background: linear-gradient(-45deg, #f506d5, #10f708);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    top: 120px;
+    left: 550px;
+}
+
+.contentCircle4 {
+    background: linear-gradient(-45deg, #f5d106, #f70808);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    top: 340px;
+    left: 200px;
+}
+
+.content {
+    gap: 1em;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 100vh;
+    border: 1px solid rgba(255, 255, 255, .5);
+    border-radius: 10px;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, .3);
+    padding: 1em;
+    backdrop-filter: blur(12px);
+    z-index: 10;
+}
+
+.task {
+    display: flex;
+    gap: 1em;
+    padding: .3em .3em .3em .3em;
+    margin-left: 1em;
+    position: relative;
+    line-height: 90%;
+    cursor: pointer;
+}
+
+.task:hover {
+    font-weight: 700;
+}
+
+.deleteTask {
+    padding: 0;
+    color: red;
+    line-height: 90%;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.inputCheckbox {
+    display: none;
+}
+
+.task span {
+    display: inline-block;
+    border: 2px solid white;
+    width: 10px;
+    height: 10px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+input[type=checkbox] + span::after {
+    content: "";
+    display: flex;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width: 50%;
+    height: 50%;
+    background-color: red;
+}
+
+input[type=checkbox]:checked + span::after {
+    content: "";
+    display: flex;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width: 50%;
+    height: 50%;
+    background-color: green;
+    border-radius: 50%;
+    
+}
+
+
+.wrapbuttons {
+    display: flex;
+    gap: 2em;
+    margin: 2em 0;
+}
+
+

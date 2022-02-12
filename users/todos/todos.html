@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todos</title>
+    <link rel="stylesheet" href="todos.css">
+</head>
+<body>
+
+    <script defer src="../node_modules/axios/dist/axios.min.js"></script>
+    <script defer src="todos.js"></script>
+<!-- {
+    "userId": 1,
+    "id": 1,
+    "title": "delectus aut autem",
+    "completed": false
+}, -->
+<div class="contentCircle1"></div>
+<div class="contentCircle2"></div>
+<div class="contentCircle3"></div>
+<div class="contentCircle4"></div>
+<section class="content">
+    <h1>My ToDo List</h1>
+    <form class="taskList">
+        <fieldset class="fieldset">
+            <legend>My Tasks</legend>
+            <label class="task" data-id="1">
+                <input type="checkbox" class="inputCheckbox"><span class="customCheckbox"></span>Testing task 1<div class="deleteTask">[ delete task ]</div>
+            </label>
+            <label class="task" data-id="2">
+                <input type="checkbox" class="inputCheckbox"><span class="customSheckbox"></span>Testing task 2<div class="deleteTask">[ delete task ]</div>
+            </label>
+            <label class="task" data-id="3">
+                <input type="checkbox" class="inputCheckbox"><span class="customSheckbox"></span>Testing task 3<div class="deleteTask">[ delete task ]</div>
+            </label>
+            <label class="task" data-id="4">
+            <input type="checkbox" class="inputCheckbox"><span class="customSheckbox"></span>Testing task 4<div class="deleteTask">[ delete task ]</div>
+            </label>
+        </fieldset>
+    </form>
+    <div class="wrapbuttons">
+    <div class="wrapSaveTasks">
+        <button class="addTasks">Add Tasks</button>
+    </div>
+
+
+        <div class="wrapGetTasks">
+            <label>
+            Choose how many tasks you want to receive:
+            <input type="number" class="amountTasksforGet">
+            </label>
+            <button class="getTasks">Get Tasks</button>
+        </div>
+    </div>
+</section>
+
+
+
+        
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+header, footer {
+    background: url("./img/bcg-image.jpg") center no-repeat;
+    background-size: cover;
+    position: relative;
+    padding: 5px 10px;
+}
+header::after, footer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+}
+
+.header-content, .footer-content {
+    position: relative;
+    color: white;
+    text-align: center;
+    z-index: 1;
+}
+
+h1 {
+    color: white;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.subHeader {
+    font-size: 20px;
+}
+
+.main-section {
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2em;
+}
+
+caption {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    border: 1px solid black;
+    padding: .2em;
+}
+
+.select {
+    margin-right: .3em;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+form input {
+    flex-grow: 1;
+}
+
+form input, form button {
+    font-size: 16px;
+    display: inline-block;
+    padding: .2em;
+}
