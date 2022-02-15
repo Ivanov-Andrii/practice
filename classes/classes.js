@@ -1,18 +1,35 @@
+const statuses = [
+    {id: "student", uiLabel: "Студент"},
+    {id: "dismissed", uiLabel: "Исключен"},
+
+]
+
 class Student {
+    _studentRow = null;
     _marks = [];
-    _status = "Студент";
+    _avarageMarks = 0;
+    _status = statuses.find((status) => {
+        return status.id === "student";
+    })
     constructor(university, course, fullName) {
         this.university = university;
         this.course = course;
         this.fullName = fullName;
     }
+
+    get studentRow () {
+        return this._studentRow;
+    }
+
+    set studentRow (htmlEl) {
+        this._studentRow = htmlEl;
+    }
+
     get marks() {
         return (!null) ? this._marks : null;
     }
     set marks(mark) {
-        if(mark === "dismiss") return this._marks = null;
-        if(mark === "recover") return this._marks = [];
-        if (this._marks && (mark > 0 && mark < 6)) {
+        if (this._marks && (mark > 0 && mark < 6) && this._status.id === "student") {
             this._marks.push(mark);
             return this.marks;
         }
@@ -22,52 +39,105 @@ class Student {
     }
 
     get status() {
-        return (this.marks === null) ? this._status = "Исключен" : this._status = "Студент";
+        return this._status;
+    }
+
+    set status(value) {
+        let isPosibleId = false;
+        this._status = statuses.find((status) => {
+            if (value === status.id) {
+                isPosibleId = true;
+                return status.id;
+            }
+        })
+        if (!isPosibleId) throw new Error("status with this id didn\`t exist");
+        return this._status;
+    }
+
+
+    setAvarageMarks() {
+        if (this.marks === null) return this._avarageMarks = null;
+        if (this.marks.length === 0) {
+            return this._avarageMarks = 0;
+        }
+        return this._avarageMarks = (this.marks.reduce((a, b) => +a+ +b, 0) / this.marks.length).toFixed(2);
+    }
+
+    addAvarageMarks() {
+        const avarageMarks = this._studentRow.querySelector(".avarageMarks");
+        avarageMarks.innerHTML = this._avarageMarks;
     }
 
     getInfo() {
-        let res = `Студент ${this.course} курса, ${this.university}, ${this.fullName} `;
-        return res;
-    }
-    dismiss () {
-        return this.marks = "dismiss";
-    }
-    recover () {
-        return this.marks = "recover";
+        return  `Студент ${this.course} курса, ${this.university}, ${this.fullName} `;
     }
 
+    dismiss () {
+        this.status = "dismissed";
+    }
+    recover () {
+        this.status = "student";
+    }
+
+    addMark () {
+        this.marks = this._studentRow.querySelector(".select").value;
+        this._studentRow.querySelector(".marks").innerHTML = this.marks;
+    }
+
+    disableButton(add, dismiss, recover, status) {
+        if (status === "dismissed") {
+            add.disabled = true;
+            dismiss.disabled = true;
+            recover.disabled = false;
+        }
+        if(status === "student") {
+            add.disabled = false;
+            dismiss.disabled = false;
+            recover.disabled = true;
+        }
+    }
+
+    handleActions () {
+        const addGradeButton = this._studentRow.querySelector(".buttonGrade");
+        const buttonDismiss = this._studentRow.querySelector(".buttonDismiss");
+        const buttonRecover = this._studentRow.querySelector(".buttonRecover");
+
+        addGradeButton.addEventListener("click", () => {
+            this.addMark();
+            this.setAvarageMarks();
+            this.addAvarageMarks();
+            this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+
+        })
+        buttonDismiss.addEventListener("click", () => {
+            this.dismiss()
+            this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+
+        })
+        buttonRecover.addEventListener("click", () => {
+            this.recover();
+            this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+
+        })
+        this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+    }
 
 }
 
 class BudgetStudent extends Student {
     _scholarship = null;
-    _avarageMarks = 0;
     constructor (university, course, fullName) {
         super(university, course, fullName);
     }
-    getAvarageMarks() {
-        if (this.marks === null) return this._avarageMarks = null;
-        return this._avarageMarks = (this.marks.reduce((a, b) => a+b, 0) / this.marks.length);
-    }
+
     getScholarship(){
         if(this.marks === null) {
             return "Студент исключен, степендия не положена";
         }
-        if(this.getAvarageMarks() >= 4.5) return this._scholarship = 1400;
-        if(this.getAvarageMarks() >= 4) return this._scholarship = 900;
+        if(this.setAvarageMarks() >= 4.5) return this._scholarship = 1400;
+        if(this.setAvarageMarks() >= 4) return this._scholarship = 900;
     }
 
-// ----- как требовалось в задании --------
-    // getScholarship(){
-//     if(this.marks === null) {
-//         return "Студент исключен, степендия не положена";
-//     }
-//     if(this.getAvarageMarks() >= 4) {
-//         setInterval(() => {
-//             console.log("Вы получили 1400 грн. стипендии");
-//         },3000)
-//     }
-// }
 }
 
 const andrii = new BudgetStudent("Garvard", 1, "Ivanov Andrii");
@@ -87,7 +157,7 @@ const addHtmlEl = (whatEl, nameParentBlock, whatHtmlIn, index, className, col, i
     id && htmlEl.setAttribute("id", id);
     const parent = document.getElementsByClassName(nameParentBlock);
     parent[index].appendChild(htmlEl);
-    return parent;
+    return htmlEl;
 }
 
 const addInput = (inputParent, inputClass, inputId, inputType, inputName, index) => {
@@ -103,8 +173,7 @@ const addInput = (inputParent, inputClass, inputId, inputType, inputName, index)
     return parent;
 }
 
-
-const buildHtmlFromObj = () => {
+const addFrameOfForm = () => {
     addHtmlEl("div", "main-section", null, 0, "addStudent");
     addHtmlEl("h2", "addStudent", "Добавить нового студента", 0, null);
 // add form;
@@ -114,35 +183,40 @@ const buildHtmlFromObj = () => {
         return addInput("form", "input", el, "text", name=el, 0);
     });
     addHtmlEl("button", "form", "Добавить", 0, "formButton");
+}
 
-//    add table:
+const addFrameOfTable = () => {
     addHtmlEl("table", "main-section", null, 0, "table");
     addHtmlEl("caption", "table", "Общий список студентов", 0, null);
 
-    // addth
     addHtmlEl("tr", "table", null, 0, "trHeader");
     const thList = ["Полное имя", "Университет", "Курс", "Статус", "Оценки", "Средняя оценка", "Поставить оценку", "Изменить статус", "Стипендия"]
     for (let i = 0; i < thList.length; i++) {
         if(i === thList.length-2 || i === thList.length-3) {
-        addHtmlEl("th", "trHeader", thList[i], 0, "th", "2");
+            addHtmlEl("th", "trHeader", thList[i], 0, "th", "2");
         } else {
             addHtmlEl("th", "trHeader", thList[i], 0, "th");
         }
     }
+}
 
-    students.forEach((el,i) => {
+const buildHtmlFromObj = () => {
+    addFrameOfForm();
+    addFrameOfTable();
 
-        addHtmlEl("tr", "table", null, 0, "trBody", null, i+1);
+    students.forEach((student,i) => {
+
+        student.studentRow = addHtmlEl("tr", "table", null, 0, "trBody", null, i+1);
 
         // add td with right classes
-        const dataForCells = [el.fullName, el.university, el.course, el.status, el.marks, +el.getAvarageMarks().toFixed(2) || "Оценок пока нет",
-            null, null, null, null, el.getScholarship() || "Стипендия не положена"];
+        const dataForCells = [student.fullName, student.university, student.course, student.status.uiLabel, student.marks, null,
+            null, null, null, null, student.getScholarship() || "Стипендия не положена"];
         const forClassName = ["fullName", "universe", "course", "status", "marks", "avarageMarks", "forSelect", "forButtonGrade",
             "forButtonDismiss", "forButtonRecover", "forScholarship"];
         dataForCells.forEach((el, index, arr) => {
             addHtmlEl("td", "trBody", el, i, forClassName[index]);
-        })
 
+        })
         addHtmlEl("select", "forSelect", null, i, "select");
         [2,3,4,5].forEach((el, index) => {
             addHtmlEl("option", "select", el, i, null)
@@ -150,67 +224,15 @@ const buildHtmlFromObj = () => {
         addHtmlEl("button", "forButtonGrade", "Поставить", i, "buttonGrade");
         addHtmlEl("button", "forButtonDismiss", "Исключить", i, "buttonDismiss");
         addHtmlEl("button", "forButtonRecover", "Восстановить", i, "buttonRecover");
+        student.handleActions ();
 
-        // дизактивируем ненужные кнопки
-        let buttonGrade = document.querySelectorAll(".buttonGrade");
-        let buttonDismiss = document.querySelectorAll(".buttonDismiss");
-        let buttonRecover = document.querySelectorAll(".buttonRecover");
-
-        if (el.status === "Исключен") {
-            buttonGrade[i].disabled = true;
-            buttonDismiss[i].disabled = true;
-            buttonRecover[i].disabled = false;
-        } else {
-            buttonGrade[i].disabled = false;
-            buttonDismiss[i].disabled = false;
-            buttonRecover[i].disabled = true;
-        }
     })
 }
 buildHtmlFromObj();
 
-    const addGrade = () => {
-        const addGradeButtons = document.querySelectorAll(".buttonGrade");
-        [...addGradeButtons].forEach((el, i) => {
-            el.addEventListener("click", () => {
-                const selectValue = +document.querySelectorAll(".select")[i].value;
-                students[i].marks = selectValue;
-                let mainSection = document.querySelector(".main-section");
-                mainSection.innerHTML = "";
-                buildHtmlFromObj();
-                addGrade();
-            })
-        })
-    }
 
 
-// Если есть оценки - не получается
-//     const dismissStudent = () => {
-//         const dismissButton = document.querySelectorAll(".buttonDismiss");
-//         [...dismissButton].forEach((el, i) => {
-//             el.addEventListener("click", () => {
-//                 // students[i].marks = [];
-//                 students[i].dismiss();
-//                 let table = document.querySelector(".table");
-//                 table.innerHTML = "";
-//                 buildHtmlFromObj();
-//             })
-//         })
-//     }
 
-    // const recoverStudent = () => {
-    //     const buttonRecover = document.querySelectorAll(".buttonRecover");
-    //     [...buttonRecover].forEach((el, i) => {
-    //         el.addEventListener("click", () => {
-    //             students[i].recover();
-    //             let table = document.querySelector(".table");
-    //             table.innerHTML = "";
-    //             buildHtmlFromObj();
-    //         })
-    //     })
-    // }
-addGrade();
-// dismissStudent();
 
 
 
