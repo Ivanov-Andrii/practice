@@ -143,7 +143,6 @@ class BudgetStudent extends Student {
     }
 
 }
-
 const andrii = new BudgetStudent("Garvard", 1, "Ivanov Andrii");
 const serhii = new BudgetStudent("Oxford", 2, "Petrov Serhii");
 const pavel = new BudgetStudent("Old University", 4, "Sidorov Pavel");
@@ -205,10 +204,7 @@ const addFrameOfTable = () => {
     }
 }
 
-const buildHtmlFromObj = () => {
-    addFrameOfForm();
-    addFrameOfTable();
-
+const addRow = (students) => {
     students.forEach((student,i) => {
 
         student.studentRow = addHtmlEl("tr", "table", null, 0, "trBody", null, i+1);
@@ -232,7 +228,37 @@ const buildHtmlFromObj = () => {
         student.handleActions ();
     })
 }
+
+const buildHtmlFromObj = () => {
+    addFrameOfForm();
+    addFrameOfTable();
+    addRow(students);
+}
 buildHtmlFromObj();
+
+const formButton = document.querySelector(".formButton");
+const surnameInput = document.getElementsByName("surname")[0];
+const nameInput = document.getElementsByName("name")[0];
+const universityInput = document.getElementsByName("university")[0];
+const courseInput = document.getElementsByName("course")[0];
+
+
+formButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const inputs = [surnameInput, nameInput, universityInput, courseInput];
+    for (let i = 0, ln = inputs.length; i < ln; i++) {
+        if(!inputs[i].value) {
+            alert(`заполните поле ${inputs[i].name}`)
+            break;
+        }
+    }
+    students.push(new BudgetStudent(universityInput.value, courseInput.value, `${surnameInput.value} ${nameInput.value}`));
+
+    // переделать, чтобы не перерисовывать все
+    section.innerHTML = "";
+    buildHtmlFromObj();
+
+})
 
 
 
