@@ -16,15 +16,12 @@ class Student {
         this.course = course;
         this.fullName = fullName;
     }
-
     get studentRow () {
         return this._studentRow;
     }
-
     set studentRow (htmlEl) {
         this._studentRow = htmlEl;
     }
-
     get marks() {
         return (!null) ? this._marks : null;
     }
@@ -37,11 +34,9 @@ class Student {
             console.log(`Неверная оценка. Поставьте оценку между 1 и 5`);
         }
     }
-
     get status() {
         return this._status;
     }
-
     set status(value) {
         let isPosibleId = false;
         this._status = statuses.find((status) => {
@@ -54,7 +49,6 @@ class Student {
         return this._status;
     }
 
-
     setAvarageMarks() {
         if (this.marks === null) return this._avarageMarks = null;
         if (this.marks.length === 0) {
@@ -62,28 +56,23 @@ class Student {
         }
         return this._avarageMarks = (this.marks.reduce((a, b) => +a+ +b, 0) / this.marks.length).toFixed(2);
     }
-
     addAvarageMarks() {
         const avarageMarks = this._studentRow.querySelector(".avarageMarks");
         avarageMarks.innerHTML = this._avarageMarks;
     }
-
     getInfo() {
         return  `Студент ${this.course} курса, ${this.university}, ${this.fullName} `;
     }
-
     dismiss () {
         this.status = "dismissed";
     }
     recover () {
         this.status = "student";
     }
-
     addMark () {
         this.marks = this._studentRow.querySelector(".select").value;
         this._studentRow.querySelector(".marks").innerHTML = this.marks;
     }
-
     disableButton(add, dismiss, recover, status) {
         if (status === "dismissed") {
             add.disabled = true;
@@ -96,7 +85,6 @@ class Student {
             recover.disabled = true;
         }
     }
-
     handleActions () {
         const addGradeButton = this._studentRow.querySelector(".buttonGrade");
         const buttonDismiss = this._studentRow.querySelector(".buttonDismiss");
@@ -107,7 +95,6 @@ class Student {
             this.setAvarageMarks();
             this.addAvarageMarks();
             this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
-
         })
         buttonDismiss.addEventListener("click", () => {
             this.dismiss()
@@ -121,7 +108,6 @@ class Student {
         })
         this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
     }
-
 }
 
 class BudgetStudent extends Student {
@@ -129,13 +115,31 @@ class BudgetStudent extends Student {
     constructor (university, course, fullName) {
         super(university, course, fullName);
     }
+    getAvarageMarks() {
+        return +this._avarageMarks;
+    }
+    get scholarship () {
+        return this._scholarship;
+    }
+    set scholarship (value) {
+        return this._scholarship = value;
+    }
+    handleActions(){
+        super.handleActions();
+        const addGradeButton = this._studentRow.querySelector(".buttonGrade");
+        const scholarship = this._studentRow.querySelector(".forScholarship");
 
-    getScholarship(){
-        if(this.marks === null) {
-            return "Студент исключен, степендия не положена";
-        }
-        if(this.setAvarageMarks() >= 4.5) return this._scholarship = 1400;
-        if(this.setAvarageMarks() >= 4) return this._scholarship = 900;
+        addGradeButton.addEventListener("click", () => {
+            this.scholarship = null;
+            if(this.getAvarageMarks() >= 4 && this.getAvarageMarks() <= 4.5) {
+                this.scholarship = 900;
+            }
+            if(this.getAvarageMarks() > 4.5 && this.getAvarageMarks() <= 5) {
+                this.scholarship = 1200;
+            }
+            (this.scholarship) ? (scholarship.innerHTML = `${this.scholarship} грн`)
+                : scholarship.innerHTML = "Стипендия не положена";
+        })
     }
 
 }
@@ -144,6 +148,7 @@ const andrii = new BudgetStudent("Garvard", 1, "Ivanov Andrii");
 const serhii = new BudgetStudent("Oxford", 2, "Petrov Serhii");
 const pavel = new BudgetStudent("Old University", 4, "Sidorov Pavel");
 const students = [andrii, serhii, pavel];
+
 
 // variables
 const section = document.querySelector(".main-section");
@@ -210,7 +215,7 @@ const buildHtmlFromObj = () => {
 
         // add td with right classes
         const dataForCells = [student.fullName, student.university, student.course, student.status.uiLabel, student.marks, null,
-            null, null, null, null, student.getScholarship() || "Стипендия не положена"];
+            null, null, null, null, null || "Стипендия не положена"];
         const forClassName = ["fullName", "universe", "course", "status", "marks", "avarageMarks", "forSelect", "forButtonGrade",
             "forButtonDismiss", "forButtonRecover", "forScholarship"];
         dataForCells.forEach((el, index, arr) => {
@@ -225,7 +230,6 @@ const buildHtmlFromObj = () => {
         addHtmlEl("button", "forButtonDismiss", "Исключить", i, "buttonDismiss");
         addHtmlEl("button", "forButtonRecover", "Восстановить", i, "buttonRecover");
         student.handleActions ();
-
     })
 }
 buildHtmlFromObj();
