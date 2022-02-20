@@ -251,7 +251,7 @@ formButton.addEventListener("click", (e) => {
     for (let i = 0, ln = inputs.length; i < ln; i++) {
         if(!inputs[i].value) {
             alert(`заполните поле ${inputs[i].name}`)
-            break;
+            return;
         }
     }
     const student = new BudgetStudent(universityInput.value, courseInput.value, `${surnameInput.value} ${nameInput.value}`)
