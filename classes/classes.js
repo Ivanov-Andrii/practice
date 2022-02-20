@@ -65,9 +65,11 @@ class Student {
     }
     dismiss () {
         this.status = "dismissed";
+        this._studentRow.querySelector(".status").innerHTML = this.status.uiLabel;
     }
     recover () {
         this.status = "student";
+        this._studentRow.querySelector(".status").innerHTML = this.status.uiLabel;
     }
     addMark () {
         this.marks = this._studentRow.querySelector(".select").value;
@@ -89,24 +91,25 @@ class Student {
         const addGradeButton = this._studentRow.querySelector(".buttonGrade");
         const buttonDismiss = this._studentRow.querySelector(".buttonDismiss");
         const buttonRecover = this._studentRow.querySelector(".buttonRecover");
+        const disableArgs = [addGradeButton, buttonDismiss, buttonRecover, this.status.id];
 
         addGradeButton.addEventListener("click", () => {
             this.addMark();
             this.setAvarageMarks();
             this.addAvarageMarks();
-            this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+            this.disableButton(...disableArgs);
         })
         buttonDismiss.addEventListener("click", () => {
             this.dismiss()
-            this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+            this.disableButton(...disableArgs);
 
         })
         buttonRecover.addEventListener("click", () => {
             this.recover();
-            this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+            this.disableButton(...disableArgs);
 
         })
-        this.disableButton(addGradeButton, buttonDismiss, buttonRecover, this.status.id);
+        this.disableButton(...disableArgs);
     }
 }
 
@@ -143,13 +146,15 @@ class BudgetStudent extends Student {
     }
 
 }
+// variables
+const students = [];
+
 const andrii = new BudgetStudent("Garvard", 1, "Ivanov Andrii");
 const serhii = new BudgetStudent("Oxford", 2, "Petrov Serhii");
 const pavel = new BudgetStudent("Old University", 4, "Sidorov Pavel");
-const students = [andrii, serhii, pavel];
+students.push(andrii, serhii, pavel);
+let indexStudent = (students.length || 0);
 
-
-// variables
 const section = document.querySelector(".main-section");
 
 // functions
@@ -204,35 +209,33 @@ const addFrameOfTable = () => {
     }
 }
 
-const addRow = (students) => {
-    students.forEach((student,i) => {
-
-        student.studentRow = addHtmlEl("tr", "table", null, 0, "trBody", null, i+1);
-
-        // add td with right classes
-        const dataForCells = [student.fullName, student.university, student.course, student.status.uiLabel, student.marks, null,
-            null, null, null, null, null || "Стипендия не положена"];
-        const forClassName = ["fullName", "universe", "course", "status", "marks", "avarageMarks", "forSelect", "forButtonGrade",
-            "forButtonDismiss", "forButtonRecover", "forScholarship"];
-        dataForCells.forEach((el, index, arr) => {
-            addHtmlEl("td", "trBody", el, i, forClassName[index]);
-
-        })
-        addHtmlEl("select", "forSelect", null, i, "select");
-        [2,3,4,5].forEach((el, index) => {
-            addHtmlEl("option", "select", el, i, null)
-        });
-        addHtmlEl("button", "forButtonGrade", "Поставить", i, "buttonGrade");
-        addHtmlEl("button", "forButtonDismiss", "Исключить", i, "buttonDismiss");
-        addHtmlEl("button", "forButtonRecover", "Восстановить", i, "buttonRecover");
-        student.handleActions ();
+const addStudent = (student, i) => {
+    student.studentRow = addHtmlEl("tr", "table", null, 0, "trBody", null, i+1);
+    // add td with right classes
+    const dataForCells = [student.fullName, student.university, student.course, student.status.uiLabel, student.marks, null,
+        null, null, null, null, null || "Стипендия не положена"];
+    const forClassName = ["fullName", "universe", "course", "status", "marks", "avarageMarks", "forSelect", "forButtonGrade",
+        "forButtonDismiss", "forButtonRecover", "forScholarship"];
+    dataForCells.forEach((el, index, arr) => {
+        addHtmlEl("td", "trBody", el, i, forClassName[index]);
     })
+    addHtmlEl("select", "forSelect", null, i, "select");
+    [2,3,4,5].forEach((el, index) => {
+        addHtmlEl("option", "select", el, i, null)
+    });
+    addHtmlEl("button", "forButtonGrade", "Поставить", i, "buttonGrade");
+    addHtmlEl("button", "forButtonDismiss", "Исключить", i, "buttonDismiss");
+    addHtmlEl("button", "forButtonRecover", "Восстановить", i, "buttonRecover");
+    student.handleActions ();
 }
 
 const buildHtmlFromObj = () => {
     addFrameOfForm();
     addFrameOfTable();
-    addRow(students);
+    students.forEach((student,i) => {
+        addStudent(student, i);
+    })
+
 }
 buildHtmlFromObj();
 
@@ -241,7 +244,6 @@ const surnameInput = document.getElementsByName("surname")[0];
 const nameInput = document.getElementsByName("name")[0];
 const universityInput = document.getElementsByName("university")[0];
 const courseInput = document.getElementsByName("course")[0];
-
 
 formButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -252,11 +254,13 @@ formButton.addEventListener("click", (e) => {
             break;
         }
     }
-    students.push(new BudgetStudent(universityInput.value, courseInput.value, `${surnameInput.value} ${nameInput.value}`));
+    const student = new BudgetStudent(universityInput.value, courseInput.value, `${surnameInput.value} ${nameInput.value}`)
+    students.push(student);
+    addStudent(student, indexStudent);
+    indexStudent++;
 
-    // переделать, чтобы не перерисовывать все
-    section.innerHTML = "";
-    buildHtmlFromObj();
+    // section.innerHTML = "";
+    // buildHtmlFromObj();
 
 })
 
